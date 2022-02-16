@@ -1,41 +1,37 @@
 'use strict'
 
+// Prevent quitting for ease of debugging
+setInterval(() => {}, 500)
+
 // Read configuration
 require('dotenv').config()
 
 // Import modules
 const http = require('http')
-const webuntis = require('webuntis')
+const webuntis = require('./webuntis')
 
 // Setup http server
 const server = new http.Server()
 
 server.addListener('request', async (req, res) => {
 
-	const url = new URL(req.url, `http://${req.headers.host}`)
-	const wantedClass = url.searchParams.get('c')
+	console.log('Got request!')
 	
-	const conn = new webuntis.WebUntisAnonymousAuth(process.env.SCHOOL, process.env.SERVER)
-	await conn.login()
+	const wantedClass = new URL(req.url, `http://${req.headers.host}`).searchParams.get('c')
 
-	const classes = await conn.getClasses()
+	const conn = await webuntis.getAnonymous(process.env.SERVER, process.env.SCHOOL)
 
-	let id = 0
-	for (let c of classes) {
-		if (c.name === wantedClass) {
-			id = c.id
-			console.log(`ID is ${id}`)
-			break
-		}
-	}
-
-	const timetable = await conn.getTimetableForToday(id, webuntis.TYPES.CLASS)
-	timetable.sort((a, b) => { return a.startTime - b.startTime })
+	const timetable = await conn.getTimetable(wantedClass, '20220216', '20220216')
+	timetable.sort((a, b) => {
+		return a.date - b.date
+	})
 
 	for (let lesson of timetable) {
-		res.write(`${lesson.startTime} - ${lesson.endTime}: ${lesson.su[0].longname}, ${lesson.lstype}, ${lesson.code}\n`)
+		res.write(
+			`${lesson.date} ${lesson.startTime} - ${lesson.endTime}: ${lesson.su[0]?.longname ?? 'Fehler'}, ${lesson.lstype}, ${lesson.code}\n`
+		)
 	}
-	
+
 	res.end('Done!')
 	conn.logout()
 })
