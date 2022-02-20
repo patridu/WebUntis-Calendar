@@ -3,8 +3,8 @@
 const axios = require('axios').default
 
 /**
- * Wrapper for a WebUntis connection
- * Call finish() to quit gracefully
+ * Wrapper for a WebUntis connection.
+ * Call finish() to quit gracefully.
  * @param {string} server Base URL of the server
  * @param {string} cookieHeader A valid cookie header string. Obtain one through a factory function
  */
@@ -57,14 +57,30 @@ class WebUntis {
 		return result.data.result
 	}
 
-	async logout() {}
+	/**
+	 * Close this session gracefully.
+	 * You will no longer be able to get data through this instance.
+	 */
+	async finish() {
+		const result = await this.#axiosPrefab({
+			url: '/WebUntis/jsonrpc.do',
+			data: {
+				id: 'CalendarUntis',
+				method: 'logout',
+				params: {},
+				jsonrpc: '2.0'
+			}
+		})
+
+		console.log(result)
+	}
 }
 
 /**
  * Get a new anonymous WebUntis connection
  * @param {string} server e.g. melpomene.webuntis.com
  * @param {string} school School name
- * @returns {WebUntis} A new WebUntis connection
+ * @returns {Promise<WebUntis>} A new WebUntis connection
  */
 module.exports.getAnonymous = async (server, school) => {
 	let result = null

@@ -10,7 +10,6 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.26.0",
-    "dotenv": "^16.0.0",
     "ical-generator": "^3.2.1"
   }
 }
