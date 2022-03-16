@@ -1,6 +1,7 @@
 'use strict'
 
 const axios = require('axios').default
+const schemas = require('./schemas')
 
 /**
  * Wrapper for a WebUntis connection.
@@ -27,7 +28,7 @@ class WebUntis {
 	}
 
 	/**
-	 * Get timetable for a class in a specified timeframe
+	 * Get timetable for a class in a specified time frame
 	 * @param {string} classId The id of the class the timetable is for
 	 * @param {string} from YYYYMMDD
 	 * @param {string} to YYYYMMDD
@@ -50,7 +51,9 @@ class WebUntis {
 		})
 
 		if (result.data.error?.message) throw new Error(`Server says: ${result.data.error.message}`)
-		if (!result.data.result) throw new Error('Unexpected response')
+
+		const validate = schemas.getSchema('timetable')
+		if (!validate(result.data)) throw new Error('Unexpected response')
 
 		console.log(result.data)
 
@@ -117,7 +120,7 @@ module.exports.getAnonymous = async (server, school) => {
 	if (!result.data?.result) throw new Error(`Could not log in on ${server}:${school}`)
 
 	// Assemble cookie header
-	if (!result.headers['set-cookie']?.length == 2)
+	if (result.headers['set-cookie']?.length !== 2)
 		throw new Error(`Unexpected cookie header with ${server}:${school}`)
 
 	let cookieHeader = result.headers['set-cookie'].map((val) => val.split(';')[0]).join('; ')

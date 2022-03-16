@@ -1,7 +1,6 @@
 {
-	"forcedServer": null,
-	"forcedSchool": null,
-	"forcedClass": null,
+	"server": null,
+	"school": null,
 	"monthsBefore": 2,
 	"monthsAfter": 4
 }

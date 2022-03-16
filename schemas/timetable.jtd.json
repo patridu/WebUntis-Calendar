@@ -1,0 +1,32 @@
+{
+	"definitions": {
+		"idArray": {
+			"elements": {
+				"additionalProperties": true,
+				"properties": {
+					"id": { "type": "uint32" }
+				}
+			}
+		}
+	},
+	"additionalProperties": true,
+	"properties": {
+		"id": { "type": "string" },
+		"jsonrpc": { "type": "string" },
+		"result": {
+			"elements": {
+				"additionalProperties": true,
+				"properties": {
+					"date": { "type": "uint32" },
+					"startTime": { "type": "uint16" },
+					"endTime": { "type": "uint16" },
+					"id": { "type": "uint32" },
+					"kl": { "ref": "idArray" },
+					"ro": { "ref": "idArray" },
+					"su": { "ref": "idArray" },
+					"te": { "ref": "idArray" }
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,8 @@
+{
+	"properties": {
+		"server": { "type": "string" },
+		"school": { "type": "string" },
+		"monthsBefore": { "type": "uint8" },
+		"monthsAfter": { "type": "uint8" }
+	}
+}
