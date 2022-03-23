@@ -1,11 +1,10 @@
 'use strict'
 
-const Ajv = require('ajv/dist/jtd').default
 const schemas = require('./schemas')
 
 // Read configuration file
 try {
-	var jsonConfig = require('./config.json')
+	var jsonConfig = require('../config.json')
 } catch (e) {
 	console.error('config.json not found. Try copying default-config.json and renaming it to config.json')
 	process.exit(2)

@@ -2,9 +2,9 @@
 
 // Import modules
 const http = require('http')
-const webuntis = require('./webuntis')
-const UntisDate = require('./untis-date')
-const Parameters = require('./parameters')
+const getWebuntisAnon = require('./webuntis/get-webuntis-anon')
+const UntisDate = require('./helper/untis-date')
+const Parameters = require('./helper/parameters')
 const ical = require('ical-generator').default
 
 const server = new http.Server()
@@ -16,7 +16,7 @@ server.addListener('request', async (req, res) => {
 
 		console.log('Got request: ', params)
 
-		const conn = await webuntis.getAnonymous(params.server, params.school)
+		const conn = await getWebuntisAnon(params.server, params.school)
 
 		const startDay = new UntisDate().changeMonth(-params.monthsBefore).getUntisDay()
 		const endDay = new UntisDate().changeMonth(params.monthsAfter).getUntisDay()

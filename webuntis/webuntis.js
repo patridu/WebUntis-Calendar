@@ -1,7 +1,7 @@
 'use strict'
 
 const axios = require('axios').default
-const schemas = require('./schemas')
+const schemas = require('../helper/schemas')
 
 /**
  * Wrapper for a WebUntis connection.
@@ -9,7 +9,7 @@ const schemas = require('./schemas')
  * @param {string} server Base URL of the server
  * @param {string} cookieHeader A valid cookie header string. Obtain one through a factory function
  */
-class WebUntis {
+module.exports = class WebUntis {
 	/** @type {AxiosInstance} */
 	#axiosPrefab
 
@@ -41,10 +41,16 @@ class WebUntis {
 				id: 'CalendarUntis',
 				method: 'getTimetable',
 				params: {
-					id: classId,
-					type: 1,
-					startDate: from,
-					endDate: to
+					options: {
+						element: {
+							id: classId,
+							type: 1
+						},
+						startDate: from,
+						endDate: to,
+						roomFields: ['name'],
+						teacherFields: ['longname']
+					}
 				},
 				jsonrpc: '2.0'
 			}
@@ -52,10 +58,11 @@ class WebUntis {
 
 		if (result.data.error?.message) throw new Error(`Server says: ${result.data.error.message}`)
 
-		const validate = schemas.getSchema('timetable')
-		if (!validate(result.data)) throw new Error('Unexpected response')
 
 		console.log(result.data)
+
+		const validate = schemas.getSchema('timetable')
+		if (!validate(result.data)) throw new Error('Unexpected response')
 
 		return result.data.result
 	}
@@ -77,53 +84,4 @@ class WebUntis {
 
 		console.log(result)
 	}
-}
-
-/**
- * Get a new anonymous WebUntis connection
- * @param {string} server e.g. melpomene.webuntis.com
- * @param {string} school School name
- * @returns {Promise<WebUntis>} A new WebUntis connection
- */
-module.exports.getAnonymous = async (server, school) => {
-	let result = null
-
-	try {
-		result = await axios({
-			method: 'POST',
-			url: `https://${server}/WebUntis/jsonrpc_intern.do`,
-			params: {
-				m: 'getUserData2017',
-				school,
-				v: 'i2.2'
-			},
-			data: {
-				id: 'CalendarUntis',
-				method: 'getUserData2017',
-				params: [
-					{
-						auth: {
-							// This login was taken from https://github.com/SchoolUtils/WebUntis
-							clientTime: new Date().getTime(),
-							user: '#anonymous#',
-							otp: 100170
-						}
-					}
-				],
-				jsonrpc: '2.0'
-			}
-		})
-	} catch (e) {
-		throw new Error(`Axios encountered an error: ${e.message}`)
-	}
-
-	if (!result.data?.result) throw new Error(`Could not log in on ${server}:${school}`)
-
-	// Assemble cookie header
-	if (result.headers['set-cookie']?.length !== 2)
-		throw new Error(`Unexpected cookie header with ${server}:${school}`)
-
-	let cookieHeader = result.headers['set-cookie'].map((val) => val.split(';')[0]).join('; ')
-
-	return new WebUntis(server, cookieHeader)
 }

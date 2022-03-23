@@ -2,7 +2,7 @@
 
 module.exports = class UntisDate {
 	/**
-	 * Thin wrapper around {@link Date} tailored for the WebUntis API
+	 * Thin wrapper around {@link Date} made for the WebUntis API
 	 */
 	constructor() {
 		this.date = new Date()
