@@ -9,6 +9,10 @@ const ical = require('ical-generator').default
 
 const server = new http.Server()
 
+const log = (text) => {
+	console.log(new Date().toLocaleString(), '-', text)
+}
+
 server.addListener('request', async (req, res) => {
 	try {
 		// Read parameters from config and url
@@ -21,6 +25,7 @@ server.addListener('request', async (req, res) => {
 		const endDay = new UntisDate().changeMonth(params.monthsAfter).getUntisDay()
 		const timetable = await conn.getTimetable(params.class, startDay, endDay)
 
+		// Convert server response to a calendar
 		const calendar = ical({ name: 'Timetable' })
 
 		for (let entry of timetable) {
@@ -34,12 +39,15 @@ server.addListener('request', async (req, res) => {
 			})
 		}
 
+		// Send the finished calendar
 		calendar.serve(res)
+
+		log(`Served ${timetable.length} entries for class ${params.class}`)
 
 		// End server session gracefully
 		conn.finish()
 	} catch (e) {
-		console.error(e)
+		log(`Failed to serve entries: ${e.message ?? 'Unknown error'}`)
 		res.end(e.toString())
 	}
 })

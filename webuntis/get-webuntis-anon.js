@@ -39,18 +39,18 @@ module.exports = async (server, school) => {
 			}
 		})
 	} catch (e) {
-		throw new Error(`Axios encountered an error: ${e.message}`)
+		throw new Error(`Could not connect to WebUntis`)
 	}
 
 	const validate = schemas.getSchema('anonymous-auth')
 
 	if (!validate(result.data)) {
-		throw new Error(`Could not log in on ${server}:${school}`)
+		throw new Error(`Could not log in`)
 	}
 
 	// Assemble cookie header
 	if (result.headers['set-cookie']?.length !== 2)
-		throw new Error(`Unexpected cookie header with ${server}:${school}`)
+		throw new Error(`Unexpected cookie header`)
 
 	let cookieHeader = result.headers['set-cookie'].map((val) => val.split(';')[0]).join('; ')
 

@@ -56,13 +56,10 @@ module.exports = class WebUntis {
 			}
 		})
 
-		if (result.data.error?.message) throw new Error(`Server says: ${result.data.error.message}`)
-
-
-		console.log(result.data)
+		if (result.data.error?.message) throw new Error(`WebUntis could not process request. Check if class ID is correct`)
 
 		const validate = schemas.getSchema('timetable')
-		if (!validate(result.data)) throw new Error('Unexpected response')
+		if (!validate(result.data)) throw new Error('Unexpected WebUntis response')
 
 		return result.data.result
 	}
@@ -81,7 +78,5 @@ module.exports = class WebUntis {
 				jsonrpc: '2.0'
 			}
 		})
-
-		console.log(result)
 	}
 }
