@@ -48,8 +48,6 @@ module.exports = async (server, school) => {
 		throw new Error(`Could not log in on ${server}:${school}`)
 	}
 
-	console.log(result.data)
-
 	// Assemble cookie header
 	if (result.headers['set-cookie']?.length !== 2)
 		throw new Error(`Unexpected cookie header with ${server}:${school}`)

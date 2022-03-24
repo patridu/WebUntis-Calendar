@@ -11,18 +11,28 @@ Access your WebUntis timetable via Google Calendar, Outlook, Apple Calendar...
 
 ### Additional notes:
 
-- This software does not use SSL by default. Consider placing it behind a reverse proxy to handle the secure connection if accessible over the internet
+- This software does not use encryption by default. Consider placing it behind a reverse proxy like NGINX to handle this
 
 ## Configuration
 
-Each configuration parameter must be specified either in `config.json` or in the URL itself. URL parameters already set in `config.json` will be ignored. The user will receive an error if a parameter is missing.
+Configure the software by editing `config.json`, the copy of `standard-config.json`.
+You can obtain `server` and `school` by looking at the address bar when accessing WebUntis:
 
-Below you will find a list of all available parameters:
+`https://test.webuntis.com/WebUntis/?school=Test+School#/basic/login`
 
-| config.json name | URL name | Usage | Example |
-|---|---|---|---|
-| forcedServer | server | WebUntis instance the request will be sent to | demo.webuntis.com |
-| forcedSchool | school, s | WebUntis school id. Must have anonymous access enabled | demo-school |
-| forcedClass | class, c | Class the timetable will be for | 10B |
-| monthsBefore | monthsBefore | How many months prior will be included in the calendar | 2 |
-| monthsAfter | monthsAfter | How many months after will be included in the calendar | 4 |
+In this case, the parameters would be `"test.webuntis.com"` and `"Test School"` respectively.
+
+`monthsBefore` and `monthsAfter` specify the timespan the result covers based on the current date.
+
+## Usage
+
+Calling the server root with a parameter "c" or "class" will return either an iCalendar file or an error message.
+
+Run the software on your local machine and access the following URL via your browser:
+`http://localhost:8081/?c=` + your class ID
+
+To obtain a class ID, go to the timetable of your choice and click the 🖨 printer icon. Then look at the URL of the popup:
+
+`.../printpreview/timetable?type=1&id=1234&date=...`
+
+In this case, the class ID would be `1234`

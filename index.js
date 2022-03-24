@@ -11,7 +11,7 @@ const server = new http.Server()
 
 server.addListener('request', async (req, res) => {
 	try {
-		// Read parameters either from config or url
+		// Read parameters from config and url
 		const params = new Parameters(req.url)
 
 		const conn = await getWebuntisAnon(params.server, params.school)
@@ -21,7 +21,7 @@ server.addListener('request', async (req, res) => {
 		const endDay = new UntisDate().changeMonth(params.monthsAfter).getUntisDay()
 		const timetable = await conn.getTimetable(params.class, startDay, endDay)
 
-		const calendar = ical({ name: 'Time table' })
+		const calendar = ical({ name: 'Timetable' })
 
 		for (let entry of timetable) {
 			let date = new UntisDate().setUntisDay(entry.date.toString())
