@@ -73,11 +73,22 @@ module.exports = class UntisDate {
 	 * @returns {UntisDate} itself
 	 */
 	setUntisTime(val) {
-		if (val.length !== 4) throw new Error(`Untis time ${val} had an unexpected length`)
+		if (val.length < 3 || val.length > 4) throw new Error(`Untis time ${val} had an unexpected length`)
+
+		val = val.padStart(4, '0')
 
 		this.date.setHours(parseInt(val.substr(0, 2)))
 		this.date.setMinutes(parseInt(val.substr(2, 2)))
+		this.date.setSeconds(0, 0)
 
 		return this
+	}
+
+	/**
+	 * Get a copy of the underlying date object
+	 * @returns {Date}
+	 */
+	getDate() {
+		return new Date(this.date)
 	}
 }

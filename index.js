@@ -14,19 +14,29 @@ server.addListener('request', async (req, res) => {
 		// Read parameters either from config or url
 		const params = new Parameters(req.url)
 
-		console.log('Got request: ', params)
-
 		const conn = await getWebuntisAnon(params.server, params.school)
 
+		// Request timetable from server
 		const startDay = new UntisDate().changeMonth(-params.monthsBefore).getUntisDay()
 		const endDay = new UntisDate().changeMonth(params.monthsAfter).getUntisDay()
 		const timetable = await conn.getTimetable(params.class, startDay, endDay)
 
 		const calendar = ical({ name: 'Time table' })
 
-		throw new Error('Sample error')
+		for (let entry of timetable) {
+			let date = new UntisDate().setUntisDay(entry.date.toString())
+
+			calendar.createEvent({
+				start: date.setUntisTime(entry.startTime.toString()).getDate(),
+				end: date.setUntisTime(entry.endTime.toString()).getDate(),
+				summary: entry.su[0]?.name ?? '?',
+				location: entry.ro[0]?.name
+			})
+		}
 
 		calendar.serve(res)
+
+		// End server session gracefully
 		conn.finish()
 	} catch (e) {
 		console.error(e)
@@ -35,5 +45,5 @@ server.addListener('request', async (req, res) => {
 })
 
 // Start webserver
-const port = process.env.PORT ?? 8080
+const port = process.env.PORT ?? 8081
 server.listen(port, '127.0.0.1', () => console.log(`Listening at port ${port}`))

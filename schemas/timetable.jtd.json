@@ -7,6 +7,14 @@
 					"id": { "type": "uint32" }
 				}
 			}
+		},
+		"nameArray": {
+			"elements": {
+				"additionalProperties": true,
+				"properties": {
+					"name": { "type": "string" }
+				}
+			}
 		}
 	},
 	"additionalProperties": true,
@@ -22,23 +30,9 @@
 					"endTime": { "type": "uint16" },
 					"id": { "type": "uint32" },
 					"kl": { "ref": "idArray" },
-					"ro": {
-						"elements": {
-							"additionalProperties": true,
-							"properties": {
-								"name": { "type": "string" }
-							}
-						}
-					},
-					"su": { "ref": "idArray" },
-					"te": {
-						"elements": {
-							"additionalProperties": true,
-							"properties": {
-								"longname": { "type": "string" }
-							}
-						}
-					}
+					"su": { "ref": "nameArray" },
+					"ro": { "ref": "nameArray" },
+					"te": { "ref": "idArray" }
 				}
 			}
 		}

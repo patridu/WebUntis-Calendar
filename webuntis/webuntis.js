@@ -49,7 +49,7 @@ module.exports = class WebUntis {
 						startDate: from,
 						endDate: to,
 						roomFields: ['name'],
-						teacherFields: ['longname']
+						subjectFields: ['name']
 					}
 				},
 				jsonrpc: '2.0'
