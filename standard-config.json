@@ -1,6 +1,6 @@
 {
-	"server": null,
-	"school": null,
+	"server": "yourserver",
+	"school": "yourschool",
 	"monthsBefore": 2,
 	"monthsAfter": 4
 }

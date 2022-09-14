@@ -26,7 +26,8 @@ In this case, the parameters would be `"test.webuntis.com"` and `"Test School"` 
 
 ## Usage
 
-Calling the server root with a parameter "c" or "class" will return either an iCalendar file or an error message.
+Calling the server root with a parameter "c" or "class" will return either an iCalendar file or nothing at all.
+Each request is logged to the console together with an error message, if necessary.
 
 Run the software on your local machine and access the following URL via your browser:
 `http://localhost:8081/?c=` + your class ID

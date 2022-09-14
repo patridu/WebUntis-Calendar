@@ -56,7 +56,7 @@ module.exports = class WebUntis {
 			}
 		})
 
-		if (result.data.error?.message) throw new Error(`WebUntis could not process request. Check if class ID is correct`)
+		if (result.data.error?.message) throw new Error(`WebUntis could not process request (${result.data.error.message})`)
 
 		const validate = schemas.getSchema('timetable')
 		if (!validate(result.data)) throw new Error('Unexpected WebUntis response')
@@ -69,7 +69,7 @@ module.exports = class WebUntis {
 	 * You will no longer be able to get data through this instance.
 	 */
 	async finish() {
-		const result = await this.#axiosPrefab({
+		await this.#axiosPrefab({
 			url: '/WebUntis/jsonrpc.do',
 			data: {
 				id: 'CalendarUntis',

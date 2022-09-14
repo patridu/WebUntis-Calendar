@@ -9,8 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "ajv": "^8.10.0",
-    "axios": "^0.26.0",
-    "ical-generator": "^3.2.1"
+    "ajv": "^8.11.0",
+    "axios": "^0.27.2",
+    "ical-generator": "^3.5.1"
   }
 }

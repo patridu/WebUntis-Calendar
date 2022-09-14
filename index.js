@@ -5,6 +5,7 @@ const http = require('http')
 const getWebuntisAnon = require('./webuntis/get-webuntis-anon')
 const UntisDate = require('./helper/untis-date')
 const Parameters = require('./helper/parameters')
+const consolidate = require('./helper/consolidate')
 const ical = require('ical-generator').default
 
 const server = new http.Server()
@@ -23,13 +24,13 @@ server.addListener('request', async (req, res) => {
 		// Request timetable from server
 		const startDay = new UntisDate().changeMonth(-params.monthsBefore).getUntisDay()
 		const endDay = new UntisDate().changeMonth(params.monthsAfter).getUntisDay()
-		const timetable = await conn.getTimetable(params.class, startDay, endDay)
+		const timetable = consolidate(await conn.getTimetable(params.class, startDay, endDay))
 
 		// Convert server response to a calendar
 		const calendar = ical({ name: 'Timetable' })
 
-		for (let entry of timetable) {
-			let date = new UntisDate().setUntisDay(entry.date.toString())
+		for (const entry of timetable) {
+			const date = new UntisDate().setUntisDay(entry.date.toString())
 
 			calendar.createEvent({
 				start: date.setUntisTime(entry.startTime.toString()).getDate(),
@@ -48,7 +49,6 @@ server.addListener('request', async (req, res) => {
 		conn.finish()
 	} catch (e) {
 		log(`Failed to serve entries: ${e.message ?? 'Unknown error'}`)
-		res.end(e.toString())
 	}
 })
 
