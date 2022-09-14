@@ -37,3 +37,5 @@ To obtain a class ID, go to the timetable of your choice and click the 🖨 prin
 `.../printpreview/timetable?type=1&id=1234&date=...`
 
 In this case, the class ID would be `1234`
+
+[WebUntis API documentation](https://untis-sr.ch/wp-content/uploads/2019/11/2018-09-20-WebUntis_JSON_RPC_API.pdf)
