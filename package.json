@@ -4,12 +4,12 @@
   "description": "Get a subscribable iCalendar from WebUntis",
   "main": "index.js",
   "scripts": {
-    "run": "node ."
+    "serve": "node ."
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "ajv": "^8.11.0",
+    "ajv": "^8.11.2",
     "axios": "^0.27.2",
     "ical-generator": "^3.5.1"
   }

@@ -35,8 +35,8 @@ server.addListener('request', async (req, res) => {
 			calendar.createEvent({
 				start: date.setUntisTime(entry.startTime.toString()).getDate(),
 				end: date.setUntisTime(entry.endTime.toString()).getDate(),
-				summary: entry.su[0]?.name ?? '?',
-				location: entry.ro[0]?.name
+				summary: entry.su,
+				location: [...entry.ro].join(', ')
 			})
 		}
 

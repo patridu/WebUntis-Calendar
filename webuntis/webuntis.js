@@ -61,7 +61,14 @@ module.exports = class WebUntis {
 		const validate = schemas.getSchema('timetable')
 		if (!validate(result.data)) throw new Error('Unexpected WebUntis response')
 
-		return result.data.result
+		const timetable = result.data.result
+
+		timetable.forEach(val => {
+			val.ro = new Set(val.ro.map(val => val.name))
+			val.su = typeof(val.su[0]?.name) === 'string' ? val.su[0].name : '?'
+		})
+
+		return timetable
 	}
 
 	/**
